@@ -1,0 +1,1 @@
+powershell.exe -sta -WindowStyle Hidden ".\SDHelper_GUI.ps1"
