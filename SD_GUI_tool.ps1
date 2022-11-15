@@ -1,25 +1,66 @@
-﻿<# Functions #>
+﻿# Content to clipboard with | clip
+
+#https://stackoverflow.com/questions/44954592/how-to-write-output-to-powershell-gui-with-scripts
+
+<# Functions #>
+
+# Wipe network stack
 Function ClearNetworkStack() {
-Write-Host "Wiping network stack..." && ipconfig /release && ipconfig /flushdns && ipconfig /renew && netsh int ip reset && netsh winsock reset && Write-Host "Cleared!"
+    $ClearNetworkStackResult = Write-Host "Wiping network stack..." && ipconfig /release && ipconfig /flushdns && ipconfig /renew && netsh int ip reset && netsh winsock reset
+    
+    if ($?) {
+        Write-Host "Successfully wiped!"
+    }
+    else {
+        Write-Host "Wipe failed."
+    }
 }
 
+# Clear cache for Chrome.
 Function ClearChromeCache() {
-Write-Host "Clearing Chrome cache..." && Remove-Item -path "$env:LOCALAPPDATA\Google\Chrome\User Data\Default\Cache\*" -Recurse -Force -EA SilentlyContinue -Verbose && Write-Host "Cleared!"
+    $ResultClearChromeCache = Write-Host "Clearing Chrome cache..." && Remove-Item -path "$env:LOCALAPPDATA\Google\Chrome\User Data\Default\Cache\*" -Recurse -Force -EA SilentlyContinue -Verbose
+    
+    if ($?) {
+        Write-Host "Cleared!"
+    }
+    else {
+        Write-Host "Clearing cache failed."
+    }
 }
 
 #Restart printer spooler
 Function RestartSpooler() {
-Write-Host "Restarting spooler..." && Restart-Service -Name Spooler && Write-Host "Restarted!"
+   $ResultRestartSpooler = Write-Host "Restarting spooler..." && Restart-Service -Name Spooler && Write-Host "Restarted!"
+
+   if ($?) {
+       Write-Host "Restarted spooler!"
+   }
+    else {
+        Write-Host "Restarting spooler failed!"
+    }
+
 }
 
 #GPupdate
 Function UpdateGP() {
-Write-Host "Updating GP..." && gpupdate /force && Write-Host "Updated!"
+    Write-Host "Updating GP..." && gpupdate /force && Write-Host "Updated!"
 }
 
 <# UI #>
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+
+function NewTextLabels () {
+
+}
+
+function NewButton () {
+    
+}
+
+function MainDisplay() {
+    
+}
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'SD Helper'

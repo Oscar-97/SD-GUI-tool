@@ -1,0 +1,1 @@
+pwsh -NoProfile -ExecutionPolicy Bypass -Command "& '.\SD_GUI_tool.ps1'"
