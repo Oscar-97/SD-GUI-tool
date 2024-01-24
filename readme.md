@@ -1,10 +1,16 @@
-![image](https://img.shields.io/badge/powershell-5391FE?style=for-the-badge&logo=powershell&logoColor=white)
-
 # Overview
 
-Small GUI tool for PowerShell 7.0, designed to streamline the execution of routine maintenance commands on client computers. Although as a proof of concept project, this tool encapsulates frequently used commands into a user-friendly interface, enhancing administrative tasks and troubleshooting processes.
-
-It's most effective for quick, routine tasks that the client can handle themselves and may not substitute comprehensive remote management solutions.
+<table>
+  <tr>
+      <td>
+      <img src="./sd-helper.png" alt="Image of SD-Helper" width="500"/>
+    </td>
+    <td>
+      <p>Small GUI tool for PowerShell, designed to streamline the execution of routine maintenance commands on client computers. Although as a proof of concept project, this tool encapsulates frequently used commands into a user-friendly interface, enhancing administrative tasks and troubleshooting processes.</p>
+      <p>It's most effective for quick, routine tasks that the client can handle themselves and may not substitute comprehensive remote management solutions.</p>
+    </td>
+  </tr>
+</table>
 
 # Features
 
@@ -20,13 +26,13 @@ The SD GUI Tool offers a set of predefined commands for quick and efficient syst
 
 ## Prerequisites
 
-Requires PowerShell 7.0 to be able to pipe the commands. Can be ran as any regular PowerShell-script:
+Requires PowerShell and can be ran as any regular PowerShell-script:
 `.\SD_GUI_tool.ps1`
 
 ## Running the tool
 
 1. Download the SD_GUI_tool.ps1 script to your local machine.
-2. Open PowerShell 7.0 with the necessary administrative privileges.
+2. Open PowerShell with the necessary administrative privileges.
 3. Navigate to the directory containing the downloaded script.
 4. Execute the script by entering the following command:
    `.\SD_GUI_tool.ps1`
