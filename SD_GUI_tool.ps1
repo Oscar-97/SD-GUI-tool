@@ -84,12 +84,19 @@ Function ShowErrorDialog {
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+# Main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'SD Helper'
-$form.Size = New-Object System.Drawing.Size(230, 230)
+$form.Size = New-Object System.Drawing.Size(245, 410)
 $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 $form.MaximizeBox = $false
+
+# System Actions group box
+$groupBox = New-Object System.Windows.Forms.GroupBox
+$groupBox.Location = New-Object System.Drawing.Point(10,10)
+$groupBox.Size = New-Object System.Drawing.Size(210,140) # Adjust size as needed
+$groupBox.Text = 'System Actions'
 
 # Clear Network Stack Button
 $clearNetworkStackButton = New-Object System.Windows.Forms.Button
@@ -97,6 +104,8 @@ $clearNetworkStackButton.Location = New-Object System.Drawing.Point(105, 15)
 $clearNetworkStackButton.Size = New-Object System.Drawing.Size(90, 25)
 $clearNetworkStackButton.Text = 'Clear'
 $clearNetworkStackButton.Add_Click({ ClearNetworkStack })
+$clearNetworkStackButton.FlatStyle = [System.Windows.Forms.FlatStyle]::System
+$clearNetworkStackButton.Cursor = [System.Windows.Forms.Cursors]::Hand
 $form.Controls.Add($clearNetworkStackButton)
 
 # Clear Chrome Cache Button
@@ -105,6 +114,8 @@ $clearCacheButton.Location = New-Object System.Drawing.Point(105, 45)
 $clearCacheButton.Size = New-Object System.Drawing.Size(90, 25)
 $clearCacheButton.Text = 'Clear'
 $clearCacheButton.Add_Click({ ClearChromeCache })
+$clearCacheButton.FlatStyle = [System.Windows.Forms.FlatStyle]::System
+$clearCacheButton.Cursor = [System.Windows.Forms.Cursors]::Hand
 $form.Controls.Add($clearCacheButton)
 
 # Restart Printer Service Button
@@ -113,6 +124,8 @@ $RestartSpoolerButton.Location = New-Object System.Drawing.Point(105, 75)
 $RestartSpoolerButton.Size = New-Object System.Drawing.Size(90, 25)
 $RestartSpoolerButton.Text = 'Restart'
 $RestartSpoolerButton.Add_Click({ RestartSpooler })
+$RestartSpoolerButton.FlatStyle = [System.Windows.Forms.FlatStyle]::System
+$RestartSpoolerButton.Cursor = [System.Windows.Forms.Cursors]::Hand
 $form.Controls.Add($RestartSpoolerButton)
 
 # Update Group Policy Button
@@ -121,36 +134,93 @@ $UpdateGPButton.Location = New-Object System.Drawing.Point(105, 105)
 $UpdateGPButton.Size = New-Object System.Drawing.Size(90, 25)
 $UpdateGPButton.Text = 'Update'
 $UpdateGPButton.Add_Click({ UpdateGP })
+$UpdateGPButton.FlatStyle = [System.Windows.Forms.FlatStyle]::System
+$UpdateGPButton.Cursor = [System.Windows.Forms.Cursors]::Hand
 $form.Controls.Add($UpdateGPButton)
 
-# Hostname
-$label = New-Object System.Windows.Forms.Label
-$label.Location = New-Object System.Drawing.Point(105, 140)
-$label.Size = New-Object System.Drawing.Size(90, 25)
-$hostName = $env:COMPUTERNAME
-$label.Text = $hostName
-$form.Controls.Add($label)
+# List of all functions
+$functions = @("Network stack", "Chrome cache", "Printer Service", "Group Policy")
 
-# Username
-$label = New-Object System.Windows.Forms.Label
-$label.Location = New-Object System.Drawing.Point(105, 170)
-$label.Size = New-Object System.Drawing.Size(90, 25)
-$userName = $env:UserName
-$label.Text = $userName
-$form.Controls.Add($label)
-
-# Labels for each function
-$functions = @("Network stack", "Chrome cache", "Printer Service", "Group Policy", "Hostname:", "Username:")
+# Create labels.
 $yPos = 20
-
 foreach ($function in $functions) {
     $label = New-Object System.Windows.Forms.Label
-    $label.Location = New-Object System.Drawing.Point(20, $yPos)
-    $label.Size = New-Object System.Drawing.Size(90, 25)
+    $label.Location = New-Object System.Drawing.Point(10, $yPos)  # Adjust the X position inside the group box
+    $label.Size = New-Object System.Drawing.Size(80, 25)  # Adjust size as needed
     $label.Text = $function
-    $form.Controls.Add($label)
+    $groupBox.Controls.Add($label)  # Add label to the group box instead of the form
     $yPos += 30
 }
+
+# Add buttons to System Actions groupbox
+$groupBox.Controls.Add($clearNetworkStackButton)
+$groupBox.Controls.Add($clearCacheButton)
+$groupBox.Controls.Add($RestartSpoolerButton)
+$groupBox.Controls.Add($UpdateGPButton)
+
+# Add groupbox to form
+$form.Controls.Add($groupBox)
+
+# Create a label pair
+function CreateLabelPair($groupBox, $labelText, $valueText, $locationY) {
+    $label = New-Object System.Windows.Forms.Label
+    $label.Location = New-Object System.Drawing.Point(10, $locationY)
+    $label.Size = New-Object System.Drawing.Size(60, 25)
+    $label.Text = $labelText
+    $groupBox.Controls.Add($label)
+
+    $valueLabel = New-Object System.Windows.Forms.Label
+    $valueLabel.Location = New-Object System.Drawing.Point(70, $locationY)
+    $valueLabel.Size = New-Object System.Drawing.Size(100, 25)
+    $valueLabel.Text = $valueText
+    $groupBox.Controls.Add($valueLabel)
+}
+
+# Create the second group box for the label and value
+$infoGroupBox = New-Object System.Windows.Forms.GroupBox
+$infoGroupBox.Location = New-Object System.Drawing.Point(10, 160) 
+$infoGroupBox.Size = New-Object System.Drawing.Size(210, 200)
+$infoGroupBox.Text = 'System Info'
+
+# Hostname
+CreateLabelPair $infoGroupBox 'Hostname:' $env:COMPUTERNAME 20
+
+# Username
+CreateLabelPair $infoGroupBox 'Username:' $env:UserName 45
+
+# Operating System
+$os = Get-WmiObject -Class Win32_OperatingSystem
+CreateLabelPair $infoGroupBox 'OS:' $os.Caption 70
+
+# CPU
+$cpu = Get-WmiObject -Class Win32_Processor
+CreateLabelPair $infoGroupBox 'CPU:' $cpu.Name 105
+
+# RAM
+$ram = Get-WmiObject -Class Win32_ComputerSystem
+CreateLabelPair $infoGroupBox 'RAM:' ('{0:N2} GB' -f ($ram.TotalPhysicalMemory / 1GB)) 140
+
+# Uptime
+$uptime = (Get-Date) - (Get-CimInstance -ClassName Win32_OperatingSystem -ComputerName $computername).LastBootUpTime
+$uptimeText = '{0} days {1} hours {2} minutes {3} seconds' -f $uptime.Days, $uptime.Hours, $uptime.Minutes, $uptime.Seconds
+CreateLabelPair $infoGroupBox 'Uptime:' $uptimeText 165
+
+# Add the labels to the second group box
+$infoGroupBox.Controls.Add($hostnameLabel)
+$infoGroupBox.Controls.Add($hostnameValue)
+$infoGroupBox.Controls.Add($usernameLabel)
+$infoGroupBox.Controls.Add($usernameValue)
+$infoGroupBox.Controls.Add($osLabel)
+$infoGroupBox.Controls.Add($osValue)
+$infoGroupBox.Controls.Add($cpuLabel)
+$infoGroupBox.Controls.Add($cpuValue)
+$infoGroupBox.Controls.Add($ramLabel)
+$infoGroupBox.Controls.Add($ramValue)
+$infoGroupBox.Controls.Add($uptimeLabel)
+$infoGroupBox.Controls.Add($uptimeValue)
+
+# Add the second group box to the form
+$form.Controls.Add($infoGroupBox)
 
 # Show the GUI
 $form.Topmost = $true
