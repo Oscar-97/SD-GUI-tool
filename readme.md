@@ -1,4 +1,4 @@
-# Overview
+# SD Helper Overview
 <p>
 <img align="left" hspace="30" src="./sd-helper.png" alt="Image of SD-Helper"/>
 </p>
@@ -11,7 +11,7 @@ It's most effective for quick, routine tasks that the client can handle themselv
 
 # Features
 <p>
-The SD GUI Tool offers a set of predefined commands for quick and efficient system maintenance:
+The script offers a set of predefined commands for quick and efficient system maintenance:
 </p>
 
    - <b>Clear Network Stack</b>: Resets the network configurations to resolve connectivity issues.
