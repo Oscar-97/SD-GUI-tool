@@ -1,1 +1,0 @@
-powershell.exe -sta -WindowStyle Hidden ".\SD_GUI_tool.ps1"
