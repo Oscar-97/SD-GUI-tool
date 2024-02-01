@@ -83,11 +83,20 @@ Function ShowErrorDialog {
 <# UI #>
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+Add-Type -TypeDefinition @'
+using System.Runtime.InteropServices;
+public class ProcessDPI {
+    [DllImport("user32.dll", SetLastError=true)]
+    public static extern bool SetProcessDPIAware();      
+}
+'@
+$null = [ProcessDPI]::SetProcessDPIAware()
+[System.Windows.Forms.Application]::EnableVisualStyles();
 
 # Main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'SD Helper'
-$form.Size = New-Object System.Drawing.Size(245, 450)
+$form.Size = New-Object System.Drawing.Size(255, 450)
 $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 $form.MaximizeBox = $false
@@ -95,7 +104,7 @@ $form.MaximizeBox = $false
 # System Actions group box
 $groupBox = New-Object System.Windows.Forms.GroupBox
 $groupBox.Location = New-Object System.Drawing.Point(10,10)
-$groupBox.Size = New-Object System.Drawing.Size(210,150) # Adjust size as needed
+$groupBox.Size = New-Object System.Drawing.Size(220,150) # Adjust size as needed
 $groupBox.Text = 'System Actions'
 
 function CreateButton($text, $pointY, $clickAction) {
@@ -147,7 +156,7 @@ function CreateLabelPair($groupBox, $labelText, $valueText, $locationY) {
 
     $valueLabel = New-Object System.Windows.Forms.Label
     $valueLabel.Location = New-Object System.Drawing.Point(80, $locationY)
-    $valueLabel.Size = New-Object System.Drawing.Size(100, 30)
+    $valueLabel.Size = New-Object System.Drawing.Size(130, 30)
     $valueLabel.Text = $valueText
     $groupBox.Controls.Add($valueLabel)
 }
@@ -155,7 +164,7 @@ function CreateLabelPair($groupBox, $labelText, $valueText, $locationY) {
 # Create the second group box for the label and value
 $infoGroupBox = New-Object System.Windows.Forms.GroupBox
 $infoGroupBox.Location = New-Object System.Drawing.Point(10, 170) 
-$infoGroupBox.Size = New-Object System.Drawing.Size(210, 230)
+$infoGroupBox.Size = New-Object System.Drawing.Size(220, 230)
 $infoGroupBox.Text = 'System Info'
 
 # Hostname
