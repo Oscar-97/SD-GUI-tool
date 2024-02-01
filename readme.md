@@ -1,16 +1,10 @@
 # Overview
 
-<table>
-  <tr>
-      <td>
-      <img src="./sd-helper.png" alt="Image of SD-Helper" width="500"/>
-    </td>
-    <td>
-      <p>Small GUI tool for PowerShell, designed to streamline the execution of routine maintenance commands on client computers. Although as a proof of concept project, this tool encapsulates frequently used commands into a user-friendly interface, enhancing administrative tasks and troubleshooting processes.</p>
-      <p>It's most effective for quick, routine tasks that the client can handle themselves and may not substitute comprehensive remote management solutions.</p>
-    </td>
-  </tr>
-</table>
+<img align="left" src="./sd-helper.png" alt="Image of SD-Helper" />
+
+Small GUI tool for PowerShell, designed to streamline the execution of routine maintenance commands on client computers. Although as a proof of concept project, this tool encapsulates frequently used commands into a user-friendly interface, enhancing administrative tasks and troubleshooting processes.
+
+It's most effective for quick, routine tasks that the client can handle themselves and may not substitute comprehensive remote management solutions.
 
 # Features
 
