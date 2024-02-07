@@ -1,5 +1,5 @@
 ﻿<# Functions #>
-# Wipe network stack
+# Wipe network stack.
 Function ClearNetworkStack {
     Write-Host "Wiping network stack..."
 
@@ -38,7 +38,7 @@ Function ClearChromeCache {
     }
 }
 
-#Restart printer spooler
+# Restart printer spooler.
 Function RestartSpooler {
     Write-Host "Restarting spooler..."
 
@@ -54,7 +54,7 @@ Function RestartSpooler {
     }
 }
 
-#GPupdate
+# Update group policies.
 Function UpdateGP {
     Write-Host "Updating GP..."
 
@@ -70,12 +70,12 @@ Function UpdateGP {
     }
 }
 
-# Success dialog
+# Success dialog.
 Function ShowSuccessDialog {
     [System.Windows.Forms.MessageBox]::Show("Operation completed successfully", "Success", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 }
 
-# Error dialog
+# Error dialog.
 Function ShowErrorDialog {
     [System.Windows.Forms.MessageBox]::Show("An error has occurred", "Error", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
 }
@@ -93,7 +93,7 @@ public class ProcessDPI {
 $null = [ProcessDPI]::SetProcessDPIAware()
 [System.Windows.Forms.Application]::EnableVisualStyles();
 
-# Main form
+# Main form.
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'SD Helper'
 $form.Size = New-Object System.Drawing.Size(255, 450)
@@ -101,12 +101,13 @@ $form.StartPosition = 'CenterScreen'
 $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 $form.MaximizeBox = $false
 
-# System Actions group box
+# System actions group box.
 $groupBox = New-Object System.Windows.Forms.GroupBox
 $groupBox.Location = New-Object System.Drawing.Point(10,10)
 $groupBox.Size = New-Object System.Drawing.Size(220,150) # Adjust size as needed
 $groupBox.Text = 'System Actions'
 
+# Creates a button and binds it to an action.
 function CreateButton($text, $pointY, $clickAction) {
     $button = New-Object System.Windows.Forms.Button
     $button.Location = New-Object System.Drawing.Point(110, $pointY)
@@ -123,7 +124,7 @@ CreateButton 'Clear' 60 { ClearChromeCache }
 CreateButton 'Restart' 90 { RestartSpooler }
 CreateButton 'Update' 120 { UpdateGP }
 
-# List of all functions
+# List of all functions.
 $functions = @("Network stack", "Chrome cache", "Printer Service", "Group Policy")
 
 # Create labels.
@@ -137,16 +138,16 @@ foreach ($function in $functions) {
     $yPos += 30
 }
 
-# Add buttons to System Actions groupbox
+# Add buttons to system actions groupbox.
 $groupBox.Controls.Add($clearNetworkStackButton)
 $groupBox.Controls.Add($clearCacheButton)
 $groupBox.Controls.Add($RestartSpoolerButton)
 $groupBox.Controls.Add($UpdateGPButton)
 
-# Add groupbox to form
+# Add groupbox to form.
 $form.Controls.Add($groupBox)
 
-# Create a label pair
+# Create a label pair.
 function CreateLabelPair($groupBox, $labelText, $valueText, $locationY) {
     $label = New-Object System.Windows.Forms.Label
     $label.Location = New-Object System.Drawing.Point(10, $locationY)
@@ -161,36 +162,36 @@ function CreateLabelPair($groupBox, $labelText, $valueText, $locationY) {
     $groupBox.Controls.Add($valueLabel)
 }
 
-# Create the second group box for the label and value
+# Create the second group box for the label and value.
 $infoGroupBox = New-Object System.Windows.Forms.GroupBox
 $infoGroupBox.Location = New-Object System.Drawing.Point(10, 170) 
 $infoGroupBox.Size = New-Object System.Drawing.Size(220, 230)
 $infoGroupBox.Text = 'System Info'
 
-# Hostname
+# Hostname label pair.
 CreateLabelPair $infoGroupBox 'Hostname:' $env:COMPUTERNAME 20
 
-# Username
+# Username label pair.
 CreateLabelPair $infoGroupBox 'Username:' $env:UserName 50
 
-# Operating System
+# Operating System label pair.
 $os = Get-WmiObject -Class Win32_OperatingSystem
 CreateLabelPair $infoGroupBox 'OS:' $os.Caption 80
 
-# CPU
+# CPU label pair.
 $cpu = Get-WmiObject -Class Win32_Processor
 CreateLabelPair $infoGroupBox 'CPU:' $cpu.Name 120
 
-# RAM
+# RAM label pair.
 $ram = Get-WmiObject -Class Win32_ComputerSystem
 CreateLabelPair $infoGroupBox 'RAM:' ('{0:N2} GB' -f ($ram.TotalPhysicalMemory / 1GB)) 160
 
-# Uptime
+# Uptime label pair.
 $uptime = (Get-Date) - (Get-CimInstance -ClassName Win32_OperatingSystem -ComputerName $computername).LastBootUpTime
 $uptimeText = '{0} days {1} hours {2} minutes {3} seconds' -f $uptime.Days, $uptime.Hours, $uptime.Minutes, $uptime.Seconds
 CreateLabelPair $infoGroupBox 'Uptime:' $uptimeText 190
 
-# Add the labels to the second group box
+# Add the labels to the second group box.
 $infoGroupBox.Controls.Add($hostnameLabel)
 $infoGroupBox.Controls.Add($hostnameValue)
 $infoGroupBox.Controls.Add($usernameLabel)
@@ -204,9 +205,9 @@ $infoGroupBox.Controls.Add($ramValue)
 $infoGroupBox.Controls.Add($uptimeLabel)
 $infoGroupBox.Controls.Add($uptimeValue)
 
-# Add the second group box to the form
+# Add the second group box to the form.
 $form.Controls.Add($infoGroupBox)
 
-# Show the GUI
+# Show the GUI.
 $form.Topmost = $true
 $form.ShowDialog()
